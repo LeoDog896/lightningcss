@@ -21522,6 +21522,27 @@ mod tests {
         ..Browsers::default()
       },
     );
+    
+    // Ref: https://github.com/parcel-bundler/lightningcss/issues/403
+    // -webkit-backdrop-filter: blur(5px) sometimes duplicates the whole rule
+    prefix_test(
+      indoc! { r#"
+        .foo {
+          -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+        }
+      "#},
+      indoc! { r#"
+        .foo {
+          -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+        }
+      "#},
+      Browsers {
+        safari: Some(15 << 16),
+        ..Browsers::default()
+      },
+    );
 
     prefix_test(
       ".foo { filter: var(--foo) }",
